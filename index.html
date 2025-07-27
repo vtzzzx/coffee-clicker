@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Coffee Clicker ☕</title>
+  <style>
+    body {
+      background-color: #1e1e1e;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    #clicker {
+      font-size: 100px;
+      cursor: pointer;
+      margin: 40px auto;
+      display: block;
+    }
+
+    #counter {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .upgrade-btn {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .upgrade-btn:hover:not(:disabled) {
+      background-color: #666;
+    }
+
+    .upgrade-btn:disabled {
+      background-color: #222;
+      color: #777;
+      cursor: not-allowed;
+    }
+
+    #upgrades {
+      margin-top: 20px;
+    }
+
+    #multiplicador {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 18px;
+      background-color: #2e2e2e;
+      padding: 10px 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #00000070;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="multiplicador">Multiplicador: 1x</div>
+
+  <h1>☕ Coffee Clicker ☕</h1>
+  <div id="counter">Cliques: 0</div>
+  <div id="clicker">☕</div>
+
+  <div id="upgrades">
+    <h2>Upgrades</h2>
+    <button class="upgrade-btn" onclick="buyUpgrade(1.5, 1000, this)">+1.5x (1.000 cliques)</button>
+    <button class="upgrade-btn" onclick="buyUpgrade(2, 5000, this)">+2x (5.000 cliques)</button>
+    <button class="upgrade-btn" onclick="buyUpgrade(3, 10000, this)">+3x (10.000 cliques)</button>
+    <button class="upgrade-btn" onclick="buyUpgrade(4, 20000, this)">+4x (20.000 cliques)</button>
+    <button class="upgrade-btn" onclick="buyUpgrade(5, 30000, this)">+5x (30.000 cliques)</button>
+  </div>
+
+  <script>
+    let clicks = parseFloat(localStorage.getItem("clicks")) || 0;
+    let multiplier = 1;
+
+    const counter = document.getElementById("counter");
+    const clicker = document.getElementById("clicker");
+    const multiplicadorText = document.getElementById("multiplicador");
+
+    clicker.addEventListener("click", () => {
+      clicks += multiplier;
+      updateCounter();
+    });
+
+    function updateCounter() {
+      counter.innerText = `Cliques: ${clicks.toFixed(1)}`;
+      localStorage.setItem("clicks", clicks);
+
+    }
+
+    function buyUpgrade(newMultiplier, cost, button) {
+      if (clicks >= cost) {
+        clicks -= cost;
+        multiplier = newMultiplier;
+        button.disabled = true;
+        button.innerText += " ✅";
+        multiplicadorText.innerText = `Multiplicador: ${multiplier.toFixed(1)}x`;
+        updateCounter();
+      } else {
+        alert("Você não tem cliques suficientes para esse upgrade!");
+      }
+    }
+  </script>
+
+</body>
+</html>
